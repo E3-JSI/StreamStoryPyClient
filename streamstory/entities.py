@@ -3,81 +3,41 @@ from typing import Union, Optional, List, Any, Dict
 from enum import Enum
 import datetime
 
-# Enums for type specifications
-class DataSourceType(str, Enum):
-    FILE = "file"
-    INTERNAL = "internal"
-
-class DataFormat(str, Enum):
-    JSON = "json"
-    CSV = "csv"
-
-class AttributeType(str, Enum):
-    TIME = "time"
-    NUMERIC = "numeric"
-    CATEGORICAL = "categorical"
-    TEXT = "text"
-
-class SubType(str, Enum):
-    STRING = "string"
-    FLOAT = "float"
-    INT = "int"
-
-class TimeType(str, Enum):
-    TIME = "time"
-    FLOAT = "float"
-    INT = "int"
-
-class WindowUnit(str, Enum):
-    SAMPLES = "samples"
-    NUMERIC = "numeric"
-    SEC = "sec"
-    MIN = "min"
-    HOUR = "hour"
-    DAY = "day"
-
-class OperationType(str, Enum):
-    TIME_SHIFT = "timeShift"
-    TIME_DELTA = "timeDelta"
-    LIN_TREND = "linTrend"
 
 # Data Source Definitions
 class DataSource(BaseModel):
-    type: DataSourceType
-    format: DataFormat
-    fileName: Optional[str] = None
-    data: Optional[Union[str, List[str], List[Dict]]] = None
+    format: str
+    fieldSep: str
+    data: str
+
 
 # Attribute Specifications
 class Attribute(BaseModel):
     name: str
-    type: AttributeType
-    source: str = "input"
-    sourceName: Optional[str] = None
-    label: Optional[str] = None
-    distWeight: Optional[float] = None
-    subType: Optional[SubType] = None
-    timeType: Optional[TimeType] = None
+    source: str
+    type: str
+    subType: str
+    timeType: Optional[str] = None
 
 # Operation Specification
 class Operation(BaseModel):
-    op: OperationType
+    op: str
     inAttr: str
     outAttr: str
-    windowUnit: WindowUnit
+    windowUnit: str
     windowSize: Union[int, float]
     timeAttr: Optional[str] = None
 
 # Configurations
 class Config(BaseModel):
-    numInitialStates: int
-    numHistogramBuckets: int
-    attributes: List[Attribute]
-    ops: List[Operation]
-    decTree_maxDepth: Optional[int]
-    decTree_minNormInfGainToSplit: Optional[float]
-    decTree_minEntropyToSplit: Optional[float] = None
-    ignoreConversionErrors: bool = True
+    numInitialStates: int = 12
+    numHistogramBuckets: int = 10
+    attributes: List[Attribute] = []
+    ops: List[Operation] = []
+    decTree_maxDepth: Optional[int] = 5
+    decTree_minNormInfGainToSplit: Optional[float] = 0.1
+    decTree_minEntropyToSplit: Optional[float] = 0.1
+    ignoreConversionErrors: bool = False
     distWeightOutliers: Optional[float] = 0.05
     includeHistograms: bool = True
     includeDecisionTrees: bool = True
@@ -174,10 +134,16 @@ class Response(BaseModel):
     errors: List[str]
     model: Optional[Model] = None
 
-class BuildModelRequest(BaseModel):
-    dataSource: DataSource
-    config: Config
 
 class ClassifySamplesRequest(BaseModel):
     dataSource: DataSource
     model: Model
+
+
+class BuildModelRequest(BaseModel):
+    name: str
+    description: str
+    dataset: str
+    public: bool
+    dataSource: DataSource
+    config: Config
