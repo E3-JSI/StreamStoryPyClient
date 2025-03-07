@@ -112,6 +112,7 @@ class Model(BaseModel):
     dataset: Dataset
 
 class ModelInfo(BaseModel):
+    id: int
     uuid: str
     username: str
     name: str
