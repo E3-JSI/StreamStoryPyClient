@@ -14,7 +14,7 @@ class DataSource(BaseModel):
 # Attribute Specifications
 class Attribute(BaseModel):
     name: str
-    source: str
+    source: Optional[str] = None
     type: str
     subType: str
     timeType: Optional[str] = None

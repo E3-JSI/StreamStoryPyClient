@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "streamstory"
-version = "0.0.2"
+version = "0.0.3"
 description = ""
 authors = ["jansturm1 <jansturm1@gmail.com>"]
 readme = "README.md"
