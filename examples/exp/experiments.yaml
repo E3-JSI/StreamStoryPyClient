@@ -1,0 +1,27 @@
+experiments:
+  river_flow_daily:
+    name: "River flow daily experiment"
+    description: "River flow model for daily anomaly detection"
+    public: false
+    dataset: "river_flow"
+    resample_unit: "1d"
+    config:
+      num_initial_states: 12
+      num_histogram_buckets: 10
+      attributes:
+        - name: "ss_timestamp"
+          source: "input"
+          type: "time"
+          subType: "integer"
+          timeType: "time"
+        - name: "value"
+          source: "input"
+          type: "numeric"
+          subType: "float"
+          
+      operations:
+        - op: "timeDelta"
+          inAttr: "value"
+          outAttr: "river_flow_derivative"
+          windowUnit: "samples"
+          windowSize: 1

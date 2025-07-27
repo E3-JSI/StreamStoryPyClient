@@ -1,0 +1,31 @@
+datasets:
+  river_flow:
+    name: "river_flow"
+    description: "River flow measurements dataset"
+    file_path: "exp/data/river_flow.csv"
+    datetime_col: "date"
+    date_format: "%Y-%m-%dT%H:%M:%S"
+    separator: ";"
+    columns:
+      - name: "date"
+        type: "datetime"
+        description: "Timestamp of the measurement"
+      - name: "value"
+        type: "float"
+        description: "River flow value"
+  
+  # Add more datasets here as needed
+  # temperature_data:
+  #   name: "temperature"
+  #   description: "Temperature measurements dataset"
+  #   file_path: "exp/data/temperature.csv"
+  #   datetime_col: "timestamp"
+  #   date_format: "%Y-%m-%d %H:%M:%S"
+  #   separator: ","
+  #   columns:
+  #     - name: "timestamp"
+  #       type: "datetime"
+  #       description: "Timestamp of the measurement"
+  #     - name: "temperature"
+  #       type: "float"
+  #       description: "Temperature value in Celsius" 
