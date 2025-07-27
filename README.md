@@ -1,94 +1,139 @@
-# StreamStory Client
+# StreamStory Python Client
 
+A Python client for the StreamStory API, providing easy access to stream processing and anomaly detection capabilities.
+
+## Installation
+
+### Option 1: Install from repository (development)
+
+Clone the repository and install in development mode:
+
+```bash
+git clone <repository-url>
+cd StreamStoryPyClient
+uv venv
+uv sync
+```
+
+### Option 2: Install published package
+
+Using pip:
+```bash
+pip install streamstory
+```
+
+Using uv:
+```bash
+uv add streamstory
+```
+
+## Usage
+
+### Basic Setup
+
+```python
+from streamstory import StreamStory
+from streamstory.entities import BuildModelRequest, DataSource, Config, Attribute, Operation
+
+# Initialize client
+client = StreamStory(api_url="https://your-api-url.com", api_key="your-api-key")
+```
+
+### Get Available Models
+
+```python
+# Get all models
+models = client.get_models()
+for model in models:
+    print(f"Model: {model.name}, UUID: {model.uuid}")
+
+# Get specific model by UUID
+model = client.get_model_by_uuid("model-uuid-here")
+```
+
+### Build a New Model
+
+```python
+# Create data source
+data_source = DataSource(
+    format="csv",
+    fieldSep=",",
+    data="your,csv,data,here"
+)
+
+# Define attributes
+attributes = [
+    Attribute(name="value", type="numeric", subType="continuous"),
+    Attribute(name="timestamp", type="time", subType="timestamp")
+]
+
+# Define operations
+operations = [
+    Operation(
+        op="mean",
+        inAttr="value",
+        outAttr="value_mean",
+        windowUnit="minutes",
+        windowSize=5
+    )
+]
+
+# Create configuration
+config = Config(
+    numInitialStates=12,
+    numHistogramBuckets=10,
+    attributes=attributes,
+    ops=operations
+)
+
+# Build model request
+request = BuildModelRequest(
+    name="My Model",
+    description="Description of the model",
+    dataset="dataset_name",
+    public=False,
+    dataSource=data_source,
+    config=config
+)
+
+# Build the model
+model_info = client.build_model(request)
+```
+
+### Delete a Model
+
+```python
+client.delete_model_by_uuid("model-uuid-here")
+```
+
+## Examples
+
+Check the `examples/` directory for complete working examples showing how to:
+- Load and process datasets
+- Configure experiments using YAML files
+- Build models with different configurations
+- Handle time series data
 
 ## Requirements
-- Python 3.10 or higher 🐍
-- Poetry for dependency management 📦
 
-## Installation 🔧
-
-To install StreamStory, follow these simple steps:
-
-### Step 1: Install Poetry
-If you haven't already, you need to install Poetry. You can do this by following the official Poetry installation guide:
-
-```bash
-curl -sSL https://install.python-poetry.org | python3 -
-```
-
-Alternatively, you can install it via pip:
-
-```bash
-pip install poetry
-```
-
-### Step 2: Clone the Repository 📂
-
-```bash
-git clone https://github.com/yourusername/streamstory.git
-```
+- Python >= 3.10
+- requests >= 2.32.3
+- pandas >= 2.2.2
+- numpy >= 1.26.4
+- python-dotenv >= 1.0.1
+- dacite >= 1.8.1
+- pydantic >= 2.8.2
 
 
-### Step 3: Install Dependencies
+## License
 
-Use Poetry to install the package dependencies:
-
-```bash
-poetry install
-```
-
-### Step 4: Activate the Virtual Environment 🔄
-
-Activate the virtual environment created by Poetry:
-
-```bash
-poetry shell
-```
-
-
-#### Init client
-
-```python
-api_url = "http://streamstory.ijs.si/api/v1"
-# create api key- http://streamstory.ijs.si/profile/api-keys
-api_key = "212ze441-d9b7-4cf8-97d6-961484436f4a"
-streamstory = StreamStory(api_url, api_key)
-```
-
-#### Get models
-
-```python
-models = streamstory.get_models()
-```
-
-#### Get model
-
-```python
-model_uuid = 'cceea9f2-cde7-410e-9111-ccd08b799f79
-model = streamstory.get_model_by_uuid(model_uuid)
-```
-
-#### Delete model
-```python
-model_uuid = 'cceea9f2-cde7-410e-9111-ccd08b799f79'
-streamstory.delete_model_by_uuid(model_uuid)
-```
-
-#### Build model
-
-```python
-...
-```
-
-
-### Examples 📚
-Run existing examples by navigating to the examples directory.
-
-```bash
-cd streamstory/examples
-python main.py
-```
-
-
-## License 📄
 StreamStoryPyClient is distributed under the MIT License. See LICENSE for more information.
+
+
+## Acknowledgements
+
+[StreamStoryPyClient](https://github.com/E3-JSI/StreamStoryPyClient) is developed by the
+[Department for Artificial Intelligence](http://ailab.ijs.si/) at the
+[Jozef Stefan Institute](http://www.ijs.si/), and other contributors.
+
+The project has received funding from the European Union's Horizon Europe innovation programme under Grant Agreement No 101092639 ([FAME](https://www.fame-horizon.eu/)).
