@@ -9,7 +9,7 @@ A Python client for the StreamStory API, providing easy access to stream process
 Clone the repository and install in development mode:
 
 ```bash
-git clone <repository-url>
+git clone git@github.com:E3-JSI/StreamStoryPyClient.git
 cd StreamStoryPyClient
 uv venv
 uv sync
